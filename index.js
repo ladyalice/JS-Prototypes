@@ -210,3 +210,170 @@ if (typeof exports !== 'undefined') {
   if (Car) { module.exports.Car = Car }
   if (Baby) { module.exports.Baby = Baby }
 }
+
+
+////////MORE PROTOTYPE CHALLENGES from TK
+
+/* ==== Prototypes Challenge
+
+  1. Study the console.log() and object method invocations at the bottom of the page. Update the Animal and Dog constructors so that the logs and methods match the commented result next to them.
+  
+  2. Stretch Challenge: Create a new constructor function called Cat. Add properties and a method unique to a cat.  Make sure cat inherits from Animal so you can use all of the properties and methods found there.
+
+
+You can check your work here:
+
+https://codepen.io/lambdaschool/pen/yxjRJa
+
+*/
+
+
+function Animal(attributes) {
+  this.animalCommonName = attributes.animalCommonName;
+  this.weight = attributes.weight;
+  this.height = attributes.height;
+  this.food = attributes.food;
+};
+
+Animal.prototype.eat = function() {
+  console.log(`The ${this.animalCommonName} eats ${this.food}.`);
+};
+
+function Dog(dogAttributes) {
+  // Connect the attributes so we can use the this keyword
+  Animal.call(this, dogAttributes);
+  this.bark = dogAttributes.bark;
+  this.name = dogAttributes.name;
+};
+
+// Set up our __proto__ inheritance to Animal
+Dog.prototype = Object.create(Animal.prototype);
+
+
+Dog.prototype.speak = function(){
+  return `${this.name} says: ${this.bark}`;
+};
+
+const dog = new Dog({
+  'name': 'Dr. Doggo',
+  'animalCommonName': "dog",
+  'weight': 40,
+  'height': 12,
+  'food': 'meat',
+  'bark': 'Woof!'
+});
+
+console.log(dog.animalCommonName); // "dog"
+console.log(dog.eat()); // "The dog eats meat"
+console.log(dog.speak()); // "Dr. Doggo says: Woof!"
+
+
+
+////////////TK Kit Prototype / Inheritance practice
+
+
+
+function Fruit(attributes){
+  this.type = attributes.type;
+  this.name = attributes.name;
+  this.isRipe = attributes.isRipe;
+  this.calories = attributes.calories
+};
+
+Fruit.prototype.calculateCalories = function(){
+  return this.calories * 100
+};
+
+Fruit.prototype.shipped = function(destination){
+  //you could add === true but it's not needed here
+  if(this.name.includes('s')){
+    //not console.log for this as we'll console.log in testing.
+    //if we console.log 2 times then it will return undefined as 
+    //the browser will try to console log a console.log that has already been (there must be a better way to explain that)
+    return`The ${this.name} were shipped to ${destination}.`
+    } else {
+    return`The ${this.name} was shipped to ${destination}.`
+  }
+};
+
+
+const cherry = new Fruit({
+  type: 'Rainier',
+  name: 'Cherries',
+  isRipe: true,
+  calories: .77
+});
+
+const grape = new Fruit({
+
+});
+
+function Tropical(attributes){
+  Fruit.call(this, attributes);
+  this.tang = attributes.tang;
+};
+//for the Tropical child to inherit the Fruit's prototype we need to do this:
+Tropical.prototype = Object.create(Fruit.prototype);
+
+const pineapple = new Tropical({
+  name: 'pineapple',
+  tang: 'intense',
+});
+console.log(Tropical);
+console.log(pineapple.tang);
+
+// console.log(cherry.shipped('mexico'));
+
+
+
+function Zimmery(attributes){
+  Fruit.call(this, attributes);
+  this.revenuePerItem = attributes.revenuePerItem;
+  this.costPerItem = attributes.costPerItem;
+};
+//now you can create a method that you can invoke on objects
+//adding .this enables you to not have to pass in arguments 
+//as the 'this' does it for you through implicit / new binding!
+//as seen in the invoking of profit on banana below.
+
+//don't forget the .prototype! it makes Fruit become the prototype!
+//Fruit becomes the parent
+
+Zimmery.prototype = Object.create(Fruit.prototype);
+
+
+
+Zimmery.prototype.profit = function(){
+  return this.revenuePerItem - this.costPerItem;
+};
+
+const banana = new Zimmery({
+  name: 'Banana',
+  type: 'Big Mike (Gros Michel)',
+  costPerItem: .5,
+  revenuePerItem: 1,
+  calories: 1
+});
+
+console.log(banana.profit());
+
+console.log(banana.calculateCalories());
+console.log(pineapple.shipped('Alaska'));
+
+//because we have return in the function, we should console.log to test
+//if the function's result would bring console.log then no need to do that here,
+//we could just invoke it
+console.log(cherry.shipped('Arkansas'));
+
+
+
+
+
+
+
+
+
+
+
+
+
