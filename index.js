@@ -286,7 +286,7 @@ Fruit.prototype.calculateCalories = function(){
 
 Fruit.prototype.shipped = function(destination){
   //you could add === true but it's not needed here
-  if(this.name.includes('s')){
+  if(this.name.includes('ies')){
     //not console.log for this as we'll console.log in testing.
     //if we console.log 2 times then it will return undefined as 
     //the browser will try to console log a console.log that has already been (there must be a better way to explain that)
@@ -294,6 +294,29 @@ Fruit.prototype.shipped = function(destination){
     } else {
     return`The ${this.name} was shipped to ${destination}.`
   }
+};
+
+//DO NOT name the fvariable "isRipe" as when you call this, 
+// later on to invoke it, it matches a variable in another scope
+//which throws off the browser.
+//be descriptive with the function names
+//better to make them verbs and the variables are the nouns 
+//at least for this case.
+Fruit.prototype.checkIsRipe = function(){
+  if(this.isRipe === true){
+    //not perfect but for the purposes of practicing an if statement:
+
+      if(this.name.includes('ies')){
+        return `Yes, the ${this.name} are ripe!`}
+      else {
+        return `Yes, the ${this.name} is ripe!`
+      }
+  } else {
+    if(this.name.includes('s')){
+        return `Nope, the ${this.name} are done for.`
+      } else {
+        return `Yes, the ${this.name} is a gonner.`}
+      }
 };
 
 
@@ -365,7 +388,7 @@ console.log(pineapple.shipped('Alaska'));
 //we could just invoke it
 console.log(cherry.shipped('Arkansas'));
 
-
+console.log(cherry.checkIsRipe());
 
 
 
